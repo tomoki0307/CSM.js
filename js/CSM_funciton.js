@@ -79,61 +79,6 @@ const getColorProperty = function(color) {
     midp: midp
   }
 }
-class csmObject{
-  constructor(color){
-    this.color=color
-  }
-  randomColor(i,boolen){
-    if (i <= this.length) {
-        let num = [Math.floor(Math.random() * this.length)];
-        let set = [this[num]];
-        while (set.length != i) {
-            let judge = 0;
-            let candidate = Math.floor(Math.random() * this.length)
-            for (let k in num) {
-                if (num[k] == candidate) {
-                    judge = -1;
-                }
-            }
-            if (judge != -1) {
-                num.push(candidate);
-                set.push(this[candidate]);
-            }
-        }
-        if (boolen == true) {
-            console.log(num)
-            console.log(set);
-        }
-        return set;
-    }
-    let random = Math.floor((Math.random() * this.length));
-    if (boolen == true) {
-        console.log(random)
-        console.log(this[random]);
-    }
-    return this[random];
-  }
-
-  alpha(alpha) {
-      if (alpha < 0 && alpha > 1) {
-          return 0
-      }
-      let set = []
-      let colorSet =this.color
-      Object.keys(colorSet).forEach(function(i){
-        if (colorSet[i].indexOf("rgba") != -1 || colorSet[i].indexOf("rgb") != -1) {
-            let rgbset = colorSet[i].split("(")[1].split(")")[0].split(",");
-            set[i] = "rgba(" + rgbset[0] + "," + rgbset[1] + "," + rgbset[2] + "," + alpha + ")";
-        } else if (colorSet[i].indexOf("#") != -1) {
-            set[i] = "rgba(" + parseInt(colorSet[i].substring(1, 3), 16) + "," + parseInt(colorSet[i].substring(3, 5), 16) + "," + parseInt(colorSet[i].substring(5, 7), 16) + "," + alpha + ")";
-        } else {
-            set[i] = colorSet[i];
-        }
-      })
-      return set;
-    }
-}
-
 
 let csm = {}
 csm.randomSet = function(boolen) {
@@ -147,6 +92,24 @@ csm.randomSet = function(boolen) {
     }
     return csmSet[property[num]];
 }
+csm.alpha = function(color,alpha) {
+    if (alpha < 0 && alpha > 1) {
+        return 0
+    }
+    let set = []
+    let colorSet =color
+    Object.keys(colorSet).forEach(function(i){
+      if (colorSet[i].indexOf("rgba") != -1 || colorSet[i].indexOf("rgb") != -1) {
+          let rgbset = colorSet[i].split("(")[1].split(")")[0].split(",");
+          set[i] = "rgba(" + rgbset[0] + "," + rgbset[1] + "," + rgbset[2] + "," + alpha + ")";
+      } else if (colorSet[i].indexOf("#") != -1) {
+          set[i] = "rgba(" + parseInt(colorSet[i].substring(1, 3), 16) + "," + parseInt(colorSet[i].substring(3, 5), 16) + "," + parseInt(colorSet[i].substring(5, 7), 16) + "," + alpha + ")";
+      } else {
+          set[i] = colorSet[i];
+      }
+    })
+    return set;
+  }
 csm.hue = function(color, i) {
     let num = i === undefined ? 12 : i;
     let r, g, b, alpha, max, min, h;
@@ -262,6 +225,7 @@ csm.value = function(color, i) {
     }
     return result;
 }
+
 csm.gradation = function(color1, color2, i) {
     let num = i === undefined ? 10 : i - 2;
     let result = [];
@@ -290,6 +254,16 @@ csm.gradation = function(color1, color2, i) {
     result.push(color2);
     return result;
 }
+csm.scale = function(color1,color2,array,max,min){
+  max = max === undefined ? 100 : max;
+  min = min === undefined ? 0 : min;
+  let result = [];
+  let cp1 = getColorProperty(color1);
+  let cp2 = getColorProperty(color2);
+  return max
+}
+var array = [10,20,30,40,50,60,70,80,90,100];
+console.log(csm.scale(csmSet.chart[0],csmSet.chart[1],array))
 csm.analogyR = function(color) {
     return csm.hue(color)[1]
 }
